@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import './App.css';
 import { SearchSection } from './components/SearchSection';
+import { InfoSection } from './components/InfoSection';
 
 export interface Data {
   info: DataInfo;
@@ -55,6 +56,7 @@ class App extends Component<Props, State> {
     return (
       <>
         <SearchSection updateData={this.updateData} />
+        <InfoSection data={this.state.data} />
       </>
     );
   }

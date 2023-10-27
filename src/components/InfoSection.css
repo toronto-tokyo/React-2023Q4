@@ -1,0 +1,19 @@
+.cards {
+  margin-top: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.card {
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 5px;
+  width: 12%;
+  color: black;
+}
+
+.card__img {
+  width: 100%;
+}
