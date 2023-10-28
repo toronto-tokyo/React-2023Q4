@@ -12,9 +12,11 @@ export class Card extends Component<Props> {
     return (
       <div className="cards__item card">
         <img src={itemData.image} alt="avatar" className="card__img" />
-        <p className="card__name">{itemData.name}</p>
-        <p className="card__status">Status: {itemData.status}</p>
-        <p className="card__specie">Specie: {itemData.species}</p>
+        <div className="card__info">
+          <p className="card__name">{itemData.name}</p>
+          <p className="card__status">Status: {itemData.status}</p>
+          <p className="card__specie">Specie: {itemData.species}</p>
+        </div>
       </div>
     );
   }

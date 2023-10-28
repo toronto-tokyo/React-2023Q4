@@ -1,0 +1,12 @@
+.error_button {
+  width: 120px;
+  background-color: #b20000;
+  color: white;
+  font-weight: 700;
+}
+
+@media (max-width: 466px) {
+  .error_button {
+    padding: 5px 0;
+  }
+}

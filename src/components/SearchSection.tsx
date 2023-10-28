@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { AppState, Data } from '../App';
 import { ErrorButton } from './ErrorButton';
+import './SearchSection.css';
 
 interface PropsInterface {
   data: AppState;
@@ -51,14 +52,19 @@ export class SearchSection extends Component<PropsInterface> {
 
   render() {
     return (
-      <section>
-        <form onSubmit={this.handleSubmit}>
-          <input
-            value={this.state.value}
-            type="input"
-            onChange={(e) => this.handleChange(e.target.value)}
-          />
-          <button type="submit">Search</button>
+      <section className="top_block">
+        <form className="search" onSubmit={this.handleSubmit}>
+          <div className="search__inner">
+            <input
+              className="search__bar"
+              value={this.state.value}
+              type="input"
+              onChange={(e) => this.handleChange(e.target.value)}
+            />
+            <button className="search__button" type="submit">
+              Search
+            </button>
+          </div>
         </form>
         <ErrorButton />
       </section>

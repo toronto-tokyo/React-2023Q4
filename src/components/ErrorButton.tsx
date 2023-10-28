@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import './ErrorButton.css';
 
 export class ErrorButton extends Component {
   state = {
@@ -13,6 +14,10 @@ export class ErrorButton extends Component {
 
   render() {
     if (this.state.throwError) throw new Error('Error');
-    return <button onClick={this.handleClick}>Throw error!</button>;
+    return (
+      <button className="error_button" onClick={this.handleClick}>
+        Throw error!
+      </button>
+    );
   }
 }

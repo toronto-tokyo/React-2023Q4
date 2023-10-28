@@ -11,12 +11,14 @@ export class InfoSection extends Component<PropsInterface> {
   render() {
     const { data } = this.props;
     return (
-      <section className="cards">
+      <section className="bottom_block">
         {data.isLoaded ? (
           data.data?.results?.length ? (
-            data.data?.results.map((item) => (
-              <Card key={item.id} itemData={item} />
-            ))
+            <div className="cards">
+              {data.data?.results.map((item) => (
+                <Card key={item.id} itemData={item} />
+              ))}
+            </div>
           ) : (
             <h1>Not not found</h1>
           )
