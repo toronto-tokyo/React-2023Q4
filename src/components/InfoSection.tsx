@@ -38,16 +38,19 @@ export class InfoSection extends Component<PropsInterface, StateInterface> {
   render() {
     return (
       <section className="cards">
-        {!this.props.data.isLoaded ? (
-          this.state.data?.results &&
-          this.state.data.results.map((item) => (
-            <div key={item.id} className="cards__item card">
-              <img src={item.image} alt="avatar" className="card__img" />
-              <p className="card__name">{item.name}</p>
-              <p className="card__status">Status: {item.status}</p>
-              <p className="card__specie">Specie: {item.species}</p>
-            </div>
-          ))
+        {this.props.data.isLoaded ? (
+          this.state.data?.results?.length ? (
+            this.state.data?.results.map((item) => (
+              <div key={item.id} className="cards__item card">
+                <img src={item.image} alt="avatar" className="card__img" />
+                <p className="card__name">{item.name}</p>
+                <p className="card__status">Status: {item.status}</p>
+                <p className="card__specie">Specie: {item.species}</p>
+              </div>
+            ))
+          ) : (
+            <h1>Not not found</h1>
+          )
         ) : (
           <div className="loader">
             <div className="loader__icon"></div>
