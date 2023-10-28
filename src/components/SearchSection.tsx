@@ -1,8 +1,9 @@
 import { Component } from 'react';
-import { Data } from '../App';
+import { AppState, Data } from '../App';
 
 interface PropsInterface {
-  updateData: (value: Data) => void;
+  data: AppState;
+  updateData: (value: AppState) => void;
 }
 
 const STORAGE_KEY = 'searchTerm';
@@ -26,9 +27,10 @@ export class SearchSection extends Component<PropsInterface> {
 
   async searchInfo(searchValue: string): Promise<void> {
     try {
+      this.props.updateData({ ...this.props.data, isLoaded: false });
       const response = await fetch(`${this.url}/?name=${searchValue}`);
       const json: Data = await response.json();
-      this.props.updateData(json);
+      this.props.updateData({ ...this.props.data, data: json, isLoaded: true });
     } catch (error) {
       console.log(error);
     }

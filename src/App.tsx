@@ -38,26 +38,27 @@ interface DataResult {
 
 interface Props {}
 
-interface State {
+export interface AppState {
   data: Data | null;
+  isLoaded: boolean;
 }
 
-class App extends Component<Props, State> {
+class App extends Component<Props, AppState> {
   state = {
     data: null,
+    isLoaded: false,
   };
 
-  updateData = (value: Data) => {
-    this.setState({ data: value });
-    console.log('App data', this.state.data);
+  updateData = (value: AppState) => {
+    this.setState(value);
   };
 
   render() {
     return (
-      <>
-        <SearchSection updateData={this.updateData} />
-        <InfoSection data={this.state.data} />
-      </>
+      <div className="wrapper">
+        <SearchSection data={this.state} updateData={this.updateData} />
+        <InfoSection data={this.state} />
+      </div>
     );
   }
 }
