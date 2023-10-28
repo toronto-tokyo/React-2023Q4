@@ -16,7 +16,7 @@ interface DataInfo {
   prev: string | null;
 }
 
-interface DataResult {
+export interface DataResult {
   id: number;
   name: string;
   status: string;

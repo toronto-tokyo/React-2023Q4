@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { AppState, Data } from '../App';
 import './InfoSection.css';
+import { Card } from './Card';
 
 interface PropsInterface {
   data: AppState;
@@ -41,12 +42,7 @@ export class InfoSection extends Component<PropsInterface, StateInterface> {
         {this.props.data.isLoaded ? (
           this.state.data?.results?.length ? (
             this.state.data?.results.map((item) => (
-              <div key={item.id} className="cards__item card">
-                <img src={item.image} alt="avatar" className="card__img" />
-                <p className="card__name">{item.name}</p>
-                <p className="card__status">Status: {item.status}</p>
-                <p className="card__specie">Specie: {item.species}</p>
-              </div>
+              <Card key={item.id} itemData={item} />
             ))
           ) : (
             <h1>Not not found</h1>
