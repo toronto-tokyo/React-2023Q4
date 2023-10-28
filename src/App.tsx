@@ -2,6 +2,7 @@ import { Component } from 'react';
 import './App.css';
 import { SearchSection } from './components/SearchSection';
 import { InfoSection } from './components/InfoSection';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 export interface Data {
   info: DataInfo;
@@ -55,10 +56,12 @@ class App extends Component<Props, AppState> {
 
   render() {
     return (
-      <div className="wrapper">
-        <SearchSection data={this.state} updateData={this.updateData} />
-        <InfoSection data={this.state} />
-      </div>
+      <ErrorBoundary>
+        <div className="wrapper">
+          <SearchSection data={this.state} updateData={this.updateData} />
+          <InfoSection data={this.state} />
+        </div>
+      </ErrorBoundary>
     );
   }
 }

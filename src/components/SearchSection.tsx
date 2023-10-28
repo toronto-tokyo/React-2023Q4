@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { AppState, Data } from '../App';
+import { ErrorButton } from './ErrorButton';
 
 interface PropsInterface {
   data: AppState;
@@ -59,6 +60,7 @@ export class SearchSection extends Component<PropsInterface> {
           />
           <button type="submit">Search</button>
         </form>
+        <ErrorButton />
       </section>
     );
   }
