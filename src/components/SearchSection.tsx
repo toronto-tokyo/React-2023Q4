@@ -18,7 +18,7 @@ export class SearchSection extends Component<Props> {
     this.handleChange(this.state.value.trim());
     this.props.updateData({
       ...this.props.data,
-      searchTerm: this.state.value,
+      searchTerm: this.state.value.trim(),
     });
   };
 
