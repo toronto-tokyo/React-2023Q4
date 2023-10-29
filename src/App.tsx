@@ -54,6 +54,7 @@ class App extends Component<Props, AppState> {
       this.updateData({ ...this.state, isLoaded: false });
       const response = await fetch(`${this.url}/?name=${searchValue}`);
       const json: SearchResponse = await response.json();
+      await new Promise((resolve) => setTimeout(resolve, 500));
       this.updateData({ ...this.state, searchResponse: json, isLoaded: true });
     } catch (error) {
       console.log(error);
