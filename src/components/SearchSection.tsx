@@ -15,7 +15,11 @@ export class SearchSection extends Component<PropsInterface> {
 
   handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    this.props.updateData({ ...this.props.data, searchTerm: this.state.value });
+    this.handleChange(this.state.value.trim());
+    this.props.updateData({
+      ...this.props.data,
+      searchTerm: this.state.value,
+    });
   };
 
   handleChange = (value: string) => {
