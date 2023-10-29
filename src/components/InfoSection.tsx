@@ -20,7 +20,7 @@ export class InfoSection extends Component<Props> {
               ))}
             </div>
           ) : (
-            <h1>Not not found</h1>
+            <h1 className="not_found">Not not found</h1>
           )
         ) : (
           <div className="loader">
