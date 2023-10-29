@@ -3,19 +3,19 @@ import { AppState } from '../App';
 import './InfoSection.css';
 import { Card } from './Card';
 
-interface PropsInterface {
+interface Props {
   data: AppState;
 }
 
-export class InfoSection extends Component<PropsInterface> {
+export class InfoSection extends Component<Props> {
   render() {
     const { data } = this.props;
     return (
       <section className="bottom_block">
         {data.isLoaded ? (
-          data.data?.results?.length ? (
+          data.searchResponse?.results?.length ? (
             <div className="cards">
-              {data.data?.results.map((item) => (
+              {data.searchResponse?.results.map((item) => (
                 <Card key={item.id} itemData={item} />
               ))}
             </div>

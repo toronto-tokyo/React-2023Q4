@@ -3,12 +3,12 @@ import { AppState } from '../App';
 import { ErrorButton } from './ErrorButton';
 import './SearchSection.css';
 
-interface PropsInterface {
+interface Props {
   data: AppState;
   updateData: (value: AppState) => void;
 }
 
-export class SearchSection extends Component<PropsInterface> {
+export class SearchSection extends Component<Props> {
   state = {
     value: this.props.data.searchTerm,
   };

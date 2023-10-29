@@ -40,7 +40,7 @@ export interface DataResult {
 interface Props {}
 
 export interface AppState {
-  data: Data | null;
+  searchResponse: Data | null;
   isLoaded: boolean;
   searchTerm: string;
 }
@@ -49,7 +49,7 @@ const STORAGE_KEY = 'searchTerm';
 
 class App extends Component<Props, AppState> {
   state = {
-    data: null,
+    searchResponse: null,
     isLoaded: false,
     searchTerm: localStorage.getItem(STORAGE_KEY) || '',
   };
@@ -86,7 +86,7 @@ class App extends Component<Props, AppState> {
       this.updateData({ ...this.state, isLoaded: false });
       const response = await fetch(`${this.url}/?name=${searchValue}`);
       const json: Data = await response.json();
-      this.updateData({ ...this.state, data: json, isLoaded: true });
+      this.updateData({ ...this.state, searchResponse: json, isLoaded: true });
     } catch (error) {
       console.log(error);
     }
