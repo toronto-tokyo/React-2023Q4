@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { AppState, Data } from '../App';
+import { AppState } from '../App';
 import { ErrorButton } from './ErrorButton';
 import './SearchSection.css';
 
@@ -8,40 +8,14 @@ interface PropsInterface {
   updateData: (value: AppState) => void;
 }
 
-const STORAGE_KEY = 'searchTerm';
-
 export class SearchSection extends Component<PropsInterface> {
-  url = 'https://rickandmortyapi.com/api/character';
-
   state = {
-    value: localStorage.getItem(STORAGE_KEY) || '',
+    value: this.props.data.searchTerm,
   };
-
-  componentDidMount(): void {
-    (async () => {
-      await this.searchInfo(this.state.value);
-    })();
-  }
-
-  componentWillUnmount(): void {
-    (async () => await this.searchInfo(''))();
-  }
-
-  async searchInfo(searchValue: string): Promise<void> {
-    try {
-      this.props.updateData({ ...this.props.data, isLoaded: false });
-      const response = await fetch(`${this.url}/?name=${searchValue}`);
-      const json: Data = await response.json();
-      this.props.updateData({ ...this.props.data, data: json, isLoaded: true });
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    await this.searchInfo(this.state.value);
-    localStorage.setItem(STORAGE_KEY, this.state.value);
+    this.props.updateData({ ...this.props.data, searchTerm: this.state.value });
   };
 
   handleChange = (value: string) => {
