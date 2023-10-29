@@ -3,44 +3,12 @@ import './App.css';
 import { SearchSection } from './components/SearchSection';
 import { InfoSection } from './components/InfoSection';
 import { ErrorBoundary } from './components/ErrorBoundary';
-
-export interface Data {
-  info: DataInfo;
-  results: DataResult[];
-}
-
-interface DataInfo {
-  count: number;
-  pages: number;
-  next: string | null;
-  prev: string | null;
-}
-
-export interface DataResult {
-  id: number;
-  name: string;
-  status: string;
-  species: string;
-  type: string;
-  gender: string;
-  origin: {
-    name: string;
-    url: string;
-  };
-  location: {
-    name: string;
-    url: string;
-  };
-  image: string;
-  episode: string[];
-  url: string;
-  created: string;
-}
+import { SearchResponse } from './types';
 
 interface Props {}
 
 export interface AppState {
-  searchResponse: Data | null;
+  searchResponse: SearchResponse | null;
   isLoaded: boolean;
   searchTerm: string;
 }
@@ -85,7 +53,7 @@ class App extends Component<Props, AppState> {
       localStorage.setItem(STORAGE_KEY, this.state.searchTerm);
       this.updateData({ ...this.state, isLoaded: false });
       const response = await fetch(`${this.url}/?name=${searchValue}`);
-      const json: Data = await response.json();
+      const json: SearchResponse = await response.json();
       this.updateData({ ...this.state, searchResponse: json, isLoaded: true });
     } catch (error) {
       console.log(error);

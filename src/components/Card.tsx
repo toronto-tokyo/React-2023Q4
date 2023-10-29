@@ -1,9 +1,9 @@
 import { Component } from 'react';
-import { DataResult } from '../App';
+import { SearchResponseResult } from '../types';
 import './Card.css';
 
 interface Props {
-  itemData: DataResult;
+  itemData: SearchResponseResult;
 }
 
 export class Card extends Component<Props> {
