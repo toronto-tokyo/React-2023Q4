@@ -2,10 +2,25 @@
   width: 100%;
   height: 100%;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
 }
 
+.error-page__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
 .error-page__info {
   font-size: 2rem;
+}
+
+.error-page__restart-btn {
+  background-color: #00ff91;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 1.5rem;
 }
