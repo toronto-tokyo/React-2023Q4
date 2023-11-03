@@ -2,12 +2,13 @@ import { Component } from 'react';
 import './App.css';
 import { SearchSection } from './components/SearchSection';
 import { InfoSection } from './components/InfoSection';
-import { SearchResponse } from './types';
+import { BeerData } from './types';
+import { BeerAPI } from './API/BeerAPI';
 
 interface Props {}
 
 export interface AppState {
-  searchResponse: SearchResponse | null;
+  searchResponse: BeerData[] | null;
   isLoaded: boolean;
   searchTerm: string;
 }
@@ -20,8 +21,6 @@ class App extends Component<Props, AppState> {
     isLoaded: false,
     searchTerm: localStorage.getItem(STORAGE_KEY) || '',
   };
-
-  url = 'https://rickandmortyapi.com/api/character';
 
   updateData = (value: AppState) => {
     this.setState(value);
@@ -51,10 +50,13 @@ class App extends Component<Props, AppState> {
     try {
       localStorage.setItem(STORAGE_KEY, this.state.searchTerm);
       this.updateData({ ...this.state, isLoaded: false });
-      const response = await fetch(`${this.url}/?name=${searchValue}`);
-      const json: SearchResponse = await response.json();
+      const response = await BeerAPI.getBeers(searchValue);
       await new Promise((resolve) => setTimeout(resolve, 500));
-      this.updateData({ ...this.state, searchResponse: json, isLoaded: true });
+      this.updateData({
+        ...this.state,
+        searchResponse: response,
+        isLoaded: true,
+      });
     } catch (error) {
       console.log(error);
     }

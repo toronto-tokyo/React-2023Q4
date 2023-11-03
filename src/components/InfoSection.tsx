@@ -13,9 +13,9 @@ export class InfoSection extends Component<Props> {
     return (
       <section className="bottom_block">
         {data.isLoaded ? (
-          data.searchResponse?.results?.length ? (
+          data.searchResponse?.length ? (
             <div className="cards">
-              {data.searchResponse?.results.map((item) => (
+              {data.searchResponse?.map((item) => (
                 <Card key={item.id} itemData={item} />
               ))}
             </div>
