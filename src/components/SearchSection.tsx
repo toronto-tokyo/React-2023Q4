@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import { ErrorButton } from './ErrorButton';
 import './SearchSection.css';
+import ErrorButton from './UI/ErrorButton/ErrorButton';
 
 interface Props {
   searchTerm: string;
