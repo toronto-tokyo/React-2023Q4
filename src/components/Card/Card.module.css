@@ -15,15 +15,15 @@
   transform: scale(1.05);
 }
 
-.card__info {
+.info {
   padding: 5px;
 }
 
-.card__img {
+.img {
   height: 100px;
 }
 
-.card__name {
+.name {
   text-align: center;
   font-weight: 700;
   text-decoration: underline;

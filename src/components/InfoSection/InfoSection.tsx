@@ -1,5 +1,5 @@
-import { Card } from '../Card';
 import { BeerData } from '../../types';
+import Card from '../Card/Card';
 import classes from './InfoSection.module.css';
 
 interface Props {
