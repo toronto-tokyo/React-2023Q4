@@ -1,4 +1,4 @@
-.error-page {
+.errorPage {
   width: 100%;
   height: 100%;
   display: flex;
@@ -7,20 +7,13 @@
   justify-content: center;
 }
 
-.error-page__inner {
+.inner {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
 }
 
-.error-page__info {
+.info {
   font-size: 2rem;
-}
-
-.error-page__restart-btn {
-  background-color: #00ff91;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 1.5rem;
 }
