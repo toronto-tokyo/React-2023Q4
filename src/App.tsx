@@ -1,11 +1,11 @@
 import './App.css';
-import { InfoSection } from './components/InfoSection';
 import { BeerData } from './types';
 import { BeerAPI } from './API/BeerAPI';
 import { useCallback, useEffect, useState } from 'react';
 import { SEARCH_TERM_STORAGE_KEY } from './constants/constants';
 import Loader from './components/Loader/Loader';
 import SearchSection from './components/SearchSection/SearchSection';
+import InfoSection from './components/InfoSection/InfoSection';
 
 function App() {
   const [beers, setBeers] = useState<BeerData[]>([]);

@@ -1,4 +1,4 @@
-.bottom_block {
+.infoSection {
   width: 90%;
   height: 100%;
   margin: 0 auto;
@@ -14,7 +14,7 @@
   gap: 30px;
 }
 
-.not_found {
+.notFound {
   text-align: center;
   font-size: 2rem;
 }
