@@ -1,31 +1,23 @@
 import { Component } from 'react';
-import { AppState } from '../App';
 import './InfoSection.css';
 import { Card } from './Card';
+import { BeerData } from '../types';
 
 interface Props {
-  data: AppState;
+  beers: BeerData[];
 }
 
 export class InfoSection extends Component<Props> {
   render() {
-    const { data } = this.props;
+    const { beers } = this.props;
     return (
       <section className="bottom_block">
-        {data.isLoaded ? (
-          data.searchResponse?.length ? (
-            <div className="cards">
-              {data.searchResponse?.map((item) => (
-                <Card key={item.id} itemData={item} />
-              ))}
-            </div>
-          ) : (
-            <h1 className="not_found">Not not found</h1>
-          )
-        ) : (
-          <div className="loader">
-            <div className="loader__icon"></div>
+        {beers.length ? (
+          <div className="cards">
+            {beers?.map((item) => <Card key={item.id} itemData={item} />)}
           </div>
+        ) : (
+          <h1 className="not_found">Not not found</h1>
         )}
       </section>
     );

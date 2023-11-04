@@ -1,25 +1,21 @@
 import { Component } from 'react';
-import { AppState } from '../App';
 import { ErrorButton } from './ErrorButton';
 import './SearchSection.css';
 
 interface Props {
-  data: AppState;
-  updateData: (value: AppState) => void;
+  searchTerm: string;
+  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export class SearchSection extends Component<Props> {
   state = {
-    value: this.props.data.searchTerm,
+    value: this.props.searchTerm,
   };
 
   handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     this.handleChange(this.state.value.trim());
-    this.props.updateData({
-      ...this.props.data,
-      searchTerm: this.state.value.trim(),
-    });
+    this.props.setSearchTerm(this.state.value);
   };
 
   handleChange = (value: string) => {

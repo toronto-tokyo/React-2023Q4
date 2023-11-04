@@ -1,75 +1,44 @@
-import { Component } from 'react';
 import './App.css';
 import { SearchSection } from './components/SearchSection';
 import { InfoSection } from './components/InfoSection';
 import { BeerData } from './types';
 import { BeerAPI } from './API/BeerAPI';
+import { useEffect, useState } from 'react';
+import { SEARCH_TERM_STORAGE_KEY } from './constants/constants';
+import Loader from './components/Loader/Loader';
 
-interface Props {}
+function App() {
+  const [beers, setBeers] = useState<BeerData[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-export interface AppState {
-  searchResponse: BeerData[] | null;
-  isLoaded: boolean;
-  searchTerm: string;
-}
-
-const STORAGE_KEY = 'searchTerm';
-
-class App extends Component<Props, AppState> {
-  state = {
-    searchResponse: null,
-    isLoaded: false,
-    searchTerm: localStorage.getItem(STORAGE_KEY) || '',
-  };
-
-  updateData = (value: AppState) => {
-    this.setState(value);
-    localStorage.setItem(STORAGE_KEY, this.state.searchTerm);
-  };
-
-  componentDidMount(): void {
-    (async () => {
-      await this.searchInfo(this.state.searchTerm);
-    })();
-  }
-
-  componentDidUpdate(
-    prevProps: Readonly<Props>,
-    prevState: Readonly<AppState>
-  ): void {
-    if (this.state.searchTerm !== prevState.searchTerm) {
-      this.searchInfo(this.state.searchTerm);
-    }
-  }
-
-  componentWillUnmount(): void {
-    (async () => await this.searchInfo(''))();
-  }
-
-  async searchInfo(searchValue: string): Promise<void> {
+  const getBeers = async (value: string) => {
+    localStorage.setItem(SEARCH_TERM_STORAGE_KEY, value);
+    setIsLoading(true);
     try {
-      localStorage.setItem(STORAGE_KEY, this.state.searchTerm);
-      this.updateData({ ...this.state, isLoaded: false });
-      const response = await BeerAPI.getBeers(searchValue);
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      this.updateData({
-        ...this.state,
-        searchResponse: response,
-        isLoaded: true,
-      });
+      const response = await BeerAPI.getBeers(value);
+      setBeers(response);
+      await delay();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
-  }
+    setIsLoading(false);
+  };
 
-  render() {
-    return (
-      <div className="wrapper">
-        <SearchSection data={this.state} updateData={this.updateData} />
-        <InfoSection data={this.state} />
-      </div>
-    );
-  }
+  const delay = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  };
+
+  useEffect(() => {
+    getBeers(searchTerm);
+  }, [searchTerm]);
+
+  return (
+    <div className="wrapper">
+      <SearchSection searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      {isLoading ? <Loader /> : <InfoSection beers={beers} />}
+    </div>
+  );
 }
 
 export default App;
