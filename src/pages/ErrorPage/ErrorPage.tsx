@@ -1,4 +1,4 @@
-import RestartButton from '../UI/RestartButton/RestartButton';
+import RestartButton from '../../components/UI/RestartButton/RestartButton';
 import classes from './ErrorPage.module.css';
 
 function ErrorPage() {
