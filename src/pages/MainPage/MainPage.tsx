@@ -12,7 +12,9 @@ import ItemsCount from '../../components/UI/ItemsCount/ItemsCount';
 
 function MainPage() {
   const [products, setProducts] = useState<ProductsData | ''>('');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(
+    () => localStorage.getItem(SEARCH_TERM_STORAGE_KEY) || ''
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(API.initialPageNumber);
   const [itemsPerPage, setItemsPerPage] = useState(API.itemsPerPage);
@@ -40,6 +42,11 @@ function MainPage() {
   );
 
   useEffect(() => {
+    const searchTerm = localStorage.getItem(SEARCH_TERM_STORAGE_KEY) || '';
+    setSearchTerm(searchTerm);
+  }, []);
+
+  useEffect(() => {
     let pageNumber = Number(search.get('page'));
     if (pageNumber < API.initialPageNumber) {
       pageNumber = API.initialPageNumber;
@@ -51,7 +58,11 @@ function MainPage() {
 
   return (
     <div className={classes.wrapper}>
-      <SearchSection searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <SearchSection
+        setCurrentPage={setCurrentPage}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+      />
       {isLoading ? (
         <Loader />
       ) : (
