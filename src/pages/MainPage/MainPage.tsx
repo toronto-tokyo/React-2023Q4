@@ -30,7 +30,6 @@ function MainPage() {
           itemsPerPage
         );
         setProducts(response);
-        await delay();
       } catch (error) {
         console.error(error);
       }
@@ -39,10 +38,6 @@ function MainPage() {
     },
     []
   );
-
-  const delay = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-  };
 
   useEffect(() => {
     let pageNumber = Number(search.get('page'));
