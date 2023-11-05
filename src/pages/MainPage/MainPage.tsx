@@ -8,18 +8,18 @@ import InfoSection from '../../components/InfoSection/InfoSection';
 import classes from './MainPage.module.css';
 import Pagination from '../../components/UI/Pagination/Pagination';
 import { useSearchParams } from 'react-router-dom';
+import ItemsCount from '../../components/UI/ItemsCount/ItemsCount';
 
 function MainPage() {
   const [products, setProducts] = useState<ProductsData | ''>('');
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(API.initialPageNumber);
-  const [itemsPerPage] = useState(API.itemsPerPage);
-  const [search] = useSearchParams();
+  const [itemsPerPage, setItemsPerPage] = useState(API.itemsPerPage);
+  const [search, setSearch] = useSearchParams();
 
   const getProducts = useCallback(
     async (value: string, currentPage: number, itemsPerPage: number) => {
-      console.log(currentPage);
       localStorage.setItem(SEARCH_TERM_STORAGE_KEY, value);
       setIsLoading(true);
       try {
@@ -44,6 +44,10 @@ function MainPage() {
   };
 
   useEffect(() => {
+    setCurrentPage(API.initialPageNumber);
+  }, [itemsPerPage]);
+
+  useEffect(() => {
     const pageNumber = Number(search.get('page'));
     setCurrentPage(pageNumber);
     setSearchTerm(localStorage.getItem(SEARCH_TERM_STORAGE_KEY) || '');
@@ -52,7 +56,9 @@ function MainPage() {
 
   useEffect(() => {
     console.log();
+    setSearch({ page: `${currentPage}` });
     getProducts(searchTerm, currentPage, itemsPerPage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm, getProducts, currentPage, itemsPerPage]);
 
   return (
@@ -62,6 +68,10 @@ function MainPage() {
         <Loader />
       ) : (
         <main className="main">
+          <ItemsCount
+            itemsPerPage={itemsPerPage}
+            setItemsPerPage={setItemsPerPage}
+          />
           <InfoSection products={products} />
           <Pagination
             totalItemsCount={products}
