@@ -1,0 +1,27 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  gap: 20px;
+  padding: 0px 20px 20px;
+}
+
+.currentPageDisplay {
+  flex: 0 0 50px;
+  display: flex;
+  justify-content: space-around;
+  padding: 5px;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+
+.button {
+  padding: 0px 3px;
+  background-color: inherit;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.button:disabled {
+  border: 1px solid rgb(160, 160, 160);
+}
