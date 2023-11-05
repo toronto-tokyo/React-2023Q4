@@ -1,5 +1,6 @@
 import { ProductData } from '../../types';
 import classes from './Card.module.css';
+import { Link } from 'react-router-dom';
 
 interface Props {
   itemData: ProductData;
@@ -7,14 +8,17 @@ interface Props {
 
 function Card({ itemData }: Props) {
   return (
-    <div className={classes.card}>
+    <Link
+      to={`/${itemData.id + window.location.search}`}
+      className={classes.card}
+    >
       <img src={itemData.images[0]} alt="avatar" className={classes.img} />
       <div className={classes.info}>
         <p className={classes.name}>{itemData.title}</p>
         <p>Brand: {itemData.brand}</p>
         <p>Price: {itemData.price}</p>
       </div>
-    </div>
+    </Link>
   );
 }
 

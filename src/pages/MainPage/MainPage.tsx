@@ -7,7 +7,7 @@ import Loader from '../../components/Loader/Loader';
 import InfoSection from '../../components/InfoSection/InfoSection';
 import classes from './MainPage.module.css';
 import Pagination from '../../components/UI/Pagination/Pagination';
-import { useSearchParams } from 'react-router-dom';
+import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import ItemsCount from '../../components/UI/ItemsCount/ItemsCount';
 
 function MainPage() {
@@ -16,7 +16,8 @@ function MainPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(API.initialPageNumber);
   const [itemsPerPage, setItemsPerPage] = useState(API.itemsPerPage);
-  const [search, setSearch] = useSearchParams();
+  const [search] = useSearchParams();
+  const navigate = useNavigate();
 
   const getProducts = useCallback(
     async (value: string, currentPage: number, itemsPerPage: number) => {
@@ -44,22 +45,14 @@ function MainPage() {
   };
 
   useEffect(() => {
-    setCurrentPage(API.initialPageNumber);
-  }, [itemsPerPage]);
-
-  useEffect(() => {
-    const pageNumber = Number(search.get('page'));
+    let pageNumber = Number(search.get('page'));
+    if (pageNumber < API.initialPageNumber) {
+      pageNumber = API.initialPageNumber;
+      navigate(`?page=${API.initialPageNumber}`);
+    }
     setCurrentPage(pageNumber);
-    setSearchTerm(localStorage.getItem(SEARCH_TERM_STORAGE_KEY) || '');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search]);
-
-  useEffect(() => {
-    console.log();
-    setSearch({ page: `${currentPage}` });
-    getProducts(searchTerm, currentPage, itemsPerPage);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchTerm, getProducts, currentPage, itemsPerPage]);
+    getProducts(searchTerm, pageNumber, itemsPerPage);
+  }, [searchTerm, getProducts, currentPage, itemsPerPage, search, navigate]);
 
   return (
     <div className={classes.wrapper}>
@@ -67,17 +60,20 @@ function MainPage() {
       {isLoading ? (
         <Loader />
       ) : (
-        <main className="main">
-          <ItemsCount
-            itemsPerPage={itemsPerPage}
-            setItemsPerPage={setItemsPerPage}
-          />
-          <InfoSection products={products} />
-          <Pagination
-            totalItemsCount={products}
-            currentPage={currentPage}
-            itemsPerPage={itemsPerPage}
-          />
+        <main className={classes.main}>
+          <div>
+            <ItemsCount
+              itemsPerPage={itemsPerPage}
+              setItemsPerPage={setItemsPerPage}
+            />
+            <InfoSection products={products} />
+            <Pagination
+              totalItemsCount={products}
+              currentPage={currentPage}
+              itemsPerPage={itemsPerPage}
+            />
+          </div>
+          <Outlet></Outlet>
         </main>
       )}
     </div>
