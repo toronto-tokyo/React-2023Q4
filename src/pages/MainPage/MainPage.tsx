@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { BeerData } from '../../types';
+import { ProductsData } from '../../types';
 import { API, SEARCH_TERM_STORAGE_KEY } from '../../constants/constants';
-import { BeerAPI } from '../../API/BeerAPI';
+import { DummyAPI } from '../../API/DummyAPI';
 import SearchSection from '../../components/SearchSection/SearchSection';
 import Loader from '../../components/Loader/Loader';
 import InfoSection from '../../components/InfoSection/InfoSection';
@@ -10,25 +10,25 @@ import Pagination from '../../components/UI/Pagination/Pagination';
 import { useSearchParams } from 'react-router-dom';
 
 function MainPage() {
-  const [beers, setBeers] = useState<BeerData[]>([]);
+  const [products, setProducts] = useState<ProductsData | ''>('');
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(API.initialPageNumber);
   const [itemsPerPage] = useState(API.itemsPerPage);
   const [search] = useSearchParams();
 
-  const getBeers = useCallback(
+  const getProducts = useCallback(
     async (value: string, currentPage: number, itemsPerPage: number) => {
       console.log(currentPage);
       localStorage.setItem(SEARCH_TERM_STORAGE_KEY, value);
       setIsLoading(true);
       try {
-        const response = await BeerAPI.getBeers(
+        const response = await DummyAPI.getProducts(
           value,
           currentPage,
           itemsPerPage
         );
-        setBeers(response);
+        setProducts(response);
         await delay();
       } catch (error) {
         console.error(error);
@@ -52,8 +52,8 @@ function MainPage() {
 
   useEffect(() => {
     console.log();
-    getBeers(searchTerm, currentPage, itemsPerPage);
-  }, [searchTerm, getBeers, currentPage, itemsPerPage]);
+    getProducts(searchTerm, currentPage, itemsPerPage);
+  }, [searchTerm, getProducts, currentPage, itemsPerPage]);
 
   return (
     <div className={classes.wrapper}>
@@ -62,8 +62,12 @@ function MainPage() {
         <Loader />
       ) : (
         <main className="main">
-          <InfoSection beers={beers} />
-          <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} />
+          <InfoSection products={products} />
+          <Pagination
+            totalItemsCount={products}
+            currentPage={currentPage}
+            itemsPerPage={itemsPerPage}
+          />
         </main>
       )}
     </div>

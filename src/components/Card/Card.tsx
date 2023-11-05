@@ -1,18 +1,18 @@
-import { BeerData } from '../../types';
+import { ProductData } from '../../types';
 import classes from './Card.module.css';
 
 interface Props {
-  itemData: BeerData;
+  itemData: ProductData;
 }
 
 function Card({ itemData }: Props) {
   return (
     <div className={classes.card}>
-      <img src={itemData.image_url} alt="avatar" className={classes.img} />
+      <img src={itemData.images[0]} alt="avatar" className={classes.img} />
       <div className={classes.info}>
-        <p className={classes.name}>{itemData.name}</p>
-        <p>Tagline: {itemData.tagline}</p>
-        <p>Volume: {itemData.volume.value}</p>
+        <p className={classes.name}>{itemData.title}</p>
+        <p>Brand: {itemData.brand}</p>
+        <p>Price: {itemData.price}</p>
       </div>
     </div>
   );

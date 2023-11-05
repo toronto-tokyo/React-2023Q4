@@ -5,17 +5,20 @@ import NextBtn from './NextBtn/NextBtn';
 import StartBtn from './StartBtn/StartBtn';
 import EndBtn from './EndBtn/EndBtn';
 import classes from './Pagination.module.css';
+import { ProductsData } from '../../../types';
 
 interface Props {
   currentPage: number;
   itemsPerPage: number;
+  totalItemsCount: ProductsData | '';
 }
 
-function Pagination({ currentPage, itemsPerPage }: Props) {
+function Pagination({ currentPage, itemsPerPage, totalItemsCount }: Props) {
   const [lastPage, setLastPage] = useState<number>(0);
 
   useEffect(() => {
-    setLastPage(getLastPage(itemsPerPage));
+    typeof totalItemsCount === 'object' &&
+      setLastPage(getLastPage(itemsPerPage, totalItemsCount.total));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -1,17 +1,19 @@
-import { BeerData } from '../../types';
+import { ProductsData } from '../../types';
 import Card from '../Card/Card';
 import classes from './InfoSection.module.css';
 
 interface Props {
-  beers: BeerData[];
+  products: ProductsData | '';
 }
 
-function InfoSection({ beers }: Props) {
+function InfoSection({ products }: Props) {
   return (
     <section className={classes.infoSection}>
-      {beers.length ? (
+      {typeof products === 'object' ? (
         <div className={classes.cards}>
-          {beers?.map((item) => <Card key={item.id} itemData={item} />)}
+          {products.products.map((product) => (
+            <Card key={product.id} itemData={product} />
+          ))}
         </div>
       ) : (
         <h1 className={classes.notFound}>Not not found</h1>

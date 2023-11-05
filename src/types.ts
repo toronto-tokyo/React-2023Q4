@@ -1,12 +1,20 @@
-export interface BeerData {
-  id: number;
-  name: string;
-  tagline: string;
-  image_url: string;
-  volume: BeerVolume;
+export interface ProductsData {
+  products: ProductData[];
+  total: number;
+  skip: number;
+  limit: number;
 }
 
-interface BeerVolume {
-  value: number;
-  unit: string;
+export interface ProductData {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  discountPercentage: number;
+  rating: number;
+  stock: number;
+  brand: string;
+  category: string;
+  thumbnail: string;
+  images: string[];
 }
