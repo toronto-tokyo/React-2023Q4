@@ -1,5 +1,5 @@
 import { API } from '../constants/constants';
-import { ProductData, ProductsData } from '../types';
+import { ProductData, ProductsData } from '../types/types';
 
 export class DummyAPI {
   static async getProducts(

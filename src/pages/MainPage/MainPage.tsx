@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { ProductsData } from '../../types';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import { API, SEARCH_TERM_STORAGE_KEY } from '../../constants/constants';
 import { DummyAPI } from '../../API/DummyAPI';
 import SearchSection from '../../components/SearchSection/SearchSection';
@@ -7,82 +6,94 @@ import Loader from '../../components/Loader/Loader';
 import InfoSection from '../../components/InfoSection/InfoSection';
 import classes from './MainPage.module.css';
 import Pagination from '../../components/UI/Pagination/Pagination';
-import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+import { Outlet, useSearchParams } from 'react-router-dom';
 import ItemsCount from '../../components/UI/ItemsCount/ItemsCount';
+import { stateReducer } from '../../stateReducer/stateReducer';
+import {
+  StateContext,
+  StateDispatchContext,
+} from '../../stateContext/StateContext';
+
+const stateInitialValue = {
+  data: null,
+  isLoading: false,
+  searchTerm: '',
+  itemsPerPage: API.itemsPerPage,
+};
 
 function MainPage() {
-  const [products, setProducts] = useState<ProductsData | ''>('');
-  const [searchTerm, setSearchTerm] = useState(
-    () => localStorage.getItem(SEARCH_TERM_STORAGE_KEY) || ''
-  );
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(API.initialPageNumber);
-  const [itemsPerPage, setItemsPerPage] = useState(API.itemsPerPage);
   const [search] = useSearchParams();
-  const navigate = useNavigate();
+  const [state, dispatch] = useReducer(stateReducer, stateInitialValue);
+  const [currentPageNumber, setCurrentPageNumber] = useState(
+    API.initialPageNumber
+  );
 
   const getProducts = useCallback(
-    async (value: string, currentPage: number, itemsPerPage: number) => {
-      localStorage.setItem(SEARCH_TERM_STORAGE_KEY, value);
-      setIsLoading(true);
-      try {
-        const response = await DummyAPI.getProducts(
-          value,
-          currentPage,
-          itemsPerPage
-        );
-        setProducts(response);
-      } catch (error) {
-        console.error(error);
-      }
-      setIsLoading(false);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    (value: string, currentPage: number, itemsPerPage: number) => {
+      (async () => {
+        dispatch({
+          type: 'fetch-request',
+        });
+        try {
+          const response = await DummyAPI.getProducts(
+            value,
+            currentPage,
+            itemsPerPage
+          );
+          dispatch({
+            type: 'fetch-success',
+            payload: response,
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      })();
     },
     []
   );
 
   useEffect(() => {
-    const searchTerm = localStorage.getItem(SEARCH_TERM_STORAGE_KEY) || '';
-    setSearchTerm(searchTerm);
+    dispatch({
+      type: 'change-search-term',
+      searchTerm: localStorage.getItem(SEARCH_TERM_STORAGE_KEY) || '',
+    });
   }, []);
 
   useEffect(() => {
-    let pageNumber = Number(search.get('page'));
+    localStorage.setItem(SEARCH_TERM_STORAGE_KEY, state.searchTerm);
+    getProducts(state.searchTerm, currentPageNumber, state.itemsPerPage);
+  }, [state.searchTerm, getProducts, state.itemsPerPage, currentPageNumber]);
+
+  useEffect(() => {
+    const pageNumber = Number(search.get('page'));
+    if (pageNumber === currentPageNumber) return;
     if (pageNumber < API.initialPageNumber) {
-      pageNumber = API.initialPageNumber;
-      navigate(`?page=${API.initialPageNumber}`);
+      setCurrentPageNumber(API.initialPageNumber);
+      return;
     }
-    setCurrentPage(pageNumber);
-    getProducts(searchTerm, pageNumber, itemsPerPage);
-  }, [searchTerm, getProducts, currentPage, itemsPerPage, search, navigate]);
+    setCurrentPageNumber(pageNumber);
+  }, [search, currentPageNumber]);
 
   return (
-    <div className={classes.wrapper}>
-      <SearchSection
-        setCurrentPage={setCurrentPage}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-      />
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <main className={classes.main}>
-          <div>
-            <ItemsCount
-              itemsPerPage={itemsPerPage}
-              setItemsPerPage={setItemsPerPage}
-            />
-            <InfoSection products={products} />
-            <Pagination
-              totalItemsCount={products}
-              currentPage={currentPage}
-              itemsPerPage={itemsPerPage}
-            />
-          </div>
-          <Outlet></Outlet>
-        </main>
-      )}
-    </div>
+    <StateContext.Provider value={state}>
+      <StateDispatchContext.Provider value={dispatch}>
+        <div className={classes.wrapper}>
+          <SearchSection />
+          {state.isLoading ? (
+            <Loader />
+          ) : (
+            <main className={classes.main}>
+              <div>
+                <ItemsCount />
+                <InfoSection />
+                <Pagination />
+              </div>
+              <Outlet></Outlet>
+            </main>
+          )}
+        </div>
+      </StateDispatchContext.Provider>
+    </StateContext.Provider>
   );
 }
 

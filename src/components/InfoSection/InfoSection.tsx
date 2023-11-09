@@ -1,17 +1,16 @@
-import { ProductsData } from '../../types';
+import { useContext } from 'react';
 import Card from '../Card/Card';
 import classes from './InfoSection.module.css';
+import { StateContext } from '../../stateContext/StateContext';
 
-interface Props {
-  products: ProductsData | '';
-}
+function InfoSection() {
+  const state = useContext(StateContext);
 
-function InfoSection({ products }: Props) {
   return (
     <section className={classes.infoSection}>
-      {typeof products === 'object' ? (
+      {!!state?.data ? (
         <div className={classes.cards}>
-          {products.products.map((product) => (
+          {state.data.products.map((product) => (
             <Card key={product.id} itemData={product} />
           ))}
         </div>

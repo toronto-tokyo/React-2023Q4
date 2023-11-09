@@ -1,24 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { getLastPage } from '../../../utils/getLastPage';
 import PrevBtn from './PrevBtn/PrevBtn';
 import NextBtn from './NextBtn/NextBtn';
 import StartBtn from './StartBtn/StartBtn';
 import EndBtn from './EndBtn/EndBtn';
 import classes from './Pagination.module.css';
-import { ProductsData } from '../../../types';
+import { StateContext } from '../../../stateContext/StateContext';
+import { API } from '../../../constants/constants';
+import { useSearchParams } from 'react-router-dom';
 
-interface Props {
-  currentPage: number;
-  itemsPerPage: number;
-  totalItemsCount: ProductsData | '';
-}
-
-function Pagination({ currentPage, itemsPerPage, totalItemsCount }: Props) {
+function Pagination() {
+  const state = useContext(StateContext);
+  const [currentPage, setCurrentPage] = useState<number>(API.initialPageNumber);
   const [lastPage, setLastPage] = useState<number>(0);
+  const [searchQuery] = useSearchParams();
 
   useEffect(() => {
-    typeof totalItemsCount === 'object' &&
-      setLastPage(getLastPage(itemsPerPage, totalItemsCount.total));
+    setCurrentPage(Number(searchQuery.get('page')) || API.initialPageNumber);
+    setLastPage(getLastPage(state?.itemsPerPage, state?.data?.total));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

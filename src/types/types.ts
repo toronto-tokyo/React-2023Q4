@@ -18,3 +18,16 @@ export interface ProductData {
   thumbnail: string;
   images: string[];
 }
+
+export interface State {
+  data: null | ProductsData;
+  searchTerm: string;
+  itemsPerPage: number;
+  isLoading: boolean;
+}
+
+export type Action =
+  | { type: 'change-search-term'; searchTerm: string }
+  | { type: 'change-items-per-page'; itemsPerPage: number }
+  | { type: 'fetch-request' }
+  | { type: 'fetch-success'; payload: null | ProductsData };

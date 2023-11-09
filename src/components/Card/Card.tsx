@@ -1,4 +1,4 @@
-import { ProductData } from '../../types';
+import { ProductData } from '../../types/types';
 import classes from './Card.module.css';
 import { Link } from 'react-router-dom';
 

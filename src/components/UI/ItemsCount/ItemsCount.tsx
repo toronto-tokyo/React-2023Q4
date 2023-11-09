@@ -1,25 +1,30 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import classes from './itemsCount.module.css';
 import { API, ITEMS_PER_PAGE_OPTIONS } from '../../../constants/constants';
 import { useNavigate } from 'react-router-dom';
+import {
+  StateContext,
+  StateDispatchContext,
+} from '../../../stateContext/StateContext';
 
-interface Props {
-  itemsPerPage: number;
-  setItemsPerPage: React.Dispatch<React.SetStateAction<number>>;
-}
-
-function ItemsCount({ itemsPerPage, setItemsPerPage }: Props) {
+function ItemsCount() {
   const navigate = useNavigate();
+  const state = useContext(StateContext);
+  const dispatchState = useContext(StateDispatchContext);
 
   const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setItemsPerPage(Number(e.target.value));
+    dispatchState &&
+      dispatchState({
+        type: 'change-items-per-page',
+        itemsPerPage: Number(e.target.value),
+      });
     navigate(`?page=${API.initialPageNumber}`);
   };
   return (
     <div className={classes.itemsCount}>
       <select
         className={classes.select}
-        value={itemsPerPage}
+        value={state?.itemsPerPage}
         onChange={changeHandler}
       >
         {ITEMS_PER_PAGE_OPTIONS.map((item) => (
