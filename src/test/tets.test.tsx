@@ -1,14 +1,16 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent, { UserEvent } from '@testing-library/user-event';
-import { http, HttpResponse } from 'msw';
+import { http, HttpResponse, PathParams } from 'msw';
 import { setupServer } from 'msw/node';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import App from '../App';
 import { API } from '../constants/constants';
 import MainPage from '../pages/MainPage/MainPage';
 import { mockProductsData } from './mockData';
+import Card from '../components/Card/Card';
+import { HttpRequestResolverExtras } from 'msw/lib/core/handlers/HttpHandler';
 
-const responder1 = async ({ request }: { request: Request }) => {
+const responder = async ({ request }: { request: Request }) => {
   const url = new URL(request.url);
   const limit = Number(url.searchParams.get('limit'));
   const searchTerm = url.searchParams.get('q');
@@ -30,9 +32,17 @@ const responder1 = async ({ request }: { request: Request }) => {
   return HttpResponse.json(response);
 };
 
+const detailProductResponder = async ({
+  params,
+}: HttpRequestResolverExtras<PathParams>) => {
+  const { id } = params;
+  return HttpResponse.json(mockProductsData[Number(id)]);
+};
+
 const server = setupServer(
-  http.get('https://dummyjson.com/products/search', responder1),
-  http.get('https://dummyjson.com/products', responder1)
+  http.get('https://dummyjson.com/products/search', responder),
+  http.get('https://dummyjson.com/products', responder),
+  http.get('https://dummyjson.com/products/:id', detailProductResponder)
 );
 
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
@@ -106,5 +116,51 @@ describe('Tests for the 404 Page component', () => {
       </MemoryRouter>
     );
     expect(screen.getByText(/something went wrong/i));
+  });
+});
+
+describe('Tests for the Card component', () => {
+  it('Ensure that the card component renders the relevant card data', () => {
+    const productData = mockProductsData[0];
+    render(
+      <BrowserRouter>
+        <Card itemData={productData} />
+      </BrowserRouter>
+    );
+    const img = screen.getByRole('img') as HTMLImageElement;
+    expect(img.src).toBe(productData.images[0]);
+    expect(screen.getByText(productData.title));
+    expect(screen.getByText(`Brand: ${productData.brand}`));
+    expect(screen.getByText(`Price: ${productData.price}`));
+  });
+
+  it('Validate that clicking on a card opens a detailed card component', async () => {
+    const user = userEvent.setup();
+    render(
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    );
+    await screen.findAllByTestId('cardElement');
+    const card = screen.getAllByTestId('cardElement')[0];
+    await user.click(card);
+    expect(await screen.findByTestId('detailedCard'));
+  });
+
+  it('Check that clicking triggers an additional API call to fetch detailed information', async () => {
+    const user = userEvent.setup();
+    const fetchSpy = vi.spyOn(window, 'fetch');
+    render(
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    );
+    await screen.findAllByTestId('cardElement');
+    const card = screen.getAllByTestId('cardElement')[0];
+    await user.click(card);
+    const productId = window.location.href.split('?')[0].split('/').at(-1);
+    expect(fetchSpy).toHaveBeenCalledWith(
+      `https://dummyjson.com/products/${productId}`
+    );
   });
 });

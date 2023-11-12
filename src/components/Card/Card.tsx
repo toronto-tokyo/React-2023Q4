@@ -1,16 +1,20 @@
 import { ProductData } from '../../types/types';
 import classes from './Card.module.css';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   itemData: ProductData;
 }
 
 function Card({ itemData }: Props) {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/${itemData.id + window.location.search}`);
+  };
   return (
-    <Link
-      to={`/${itemData.id + window.location.search}`}
+    <div
       className={classes.card}
+      onClick={handleClick}
       data-testid="cardElement"
     >
       <img src={itemData.images[0]} alt="avatar" className={classes.img} />
@@ -19,7 +23,7 @@ function Card({ itemData }: Props) {
         <p>Brand: {itemData.brand}</p>
         <p>Price: {itemData.price}</p>
       </div>
-    </Link>
+    </div>
   );
 }
 

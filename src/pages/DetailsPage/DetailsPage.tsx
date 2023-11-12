@@ -31,7 +31,7 @@ function DetailsPage() {
   };
 
   return (
-    <div>
+    <div data-testid="detailedCard">
       {isLoaded ? (
         typeof product === 'object' && (
           <div className={classes.productWrapper}>
