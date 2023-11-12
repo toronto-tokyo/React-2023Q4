@@ -1,11 +1,12 @@
+import { act, render, screen } from '@testing-library/react';
+import userEvent, { UserEvent } from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import { act, render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter } from 'react-router-dom';
+import App from '../App';
+import { API } from '../constants/constants';
 import MainPage from '../pages/MainPage/MainPage';
 import { mockProductsData } from './mockData';
-import userEvent, { UserEvent } from '@testing-library/user-event';
-import { API } from '../constants/constants';
 
 const responder1 = async ({ request }: { request: Request }) => {
   const url = new URL(request.url);
@@ -93,5 +94,17 @@ describe('Tests for the Card List component', () => {
       await user.click(screen.getByRole('button', { name: 'Search' }));
     });
     expect(await screen.findByText(/not found/));
+  });
+});
+
+describe('Tests for the 404 Page component', () => {
+  it('Ensure that the 404 page is displayed when navigating to an invalid route.', () => {
+    const invalidRoute = '/qwe/rty';
+    render(
+      <MemoryRouter initialEntries={[invalidRoute]}>
+        <App></App>
+      </MemoryRouter>
+    );
+    expect(screen.getByText(/something went wrong/i));
   });
 });
