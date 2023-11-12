@@ -31,10 +31,10 @@ function DetailsPage() {
   };
 
   return (
-    <div data-testid="detailedCard">
+    <div>
       {isLoaded ? (
         typeof product === 'object' && (
-          <div className={classes.productWrapper}>
+          <div className={classes.productWrapper} data-testid="detailedCard">
             <div className={classes.middleware} onClick={handleClick}></div>
             <div className={classes.product}>
               <button className={classes.closeButton} onClick={handleClick}>

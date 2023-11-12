@@ -1,6 +1,6 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent, { UserEvent } from '@testing-library/user-event';
-import { http, HttpResponse, PathParams } from 'msw';
+import { delay, http, HttpResponse, PathParams } from 'msw';
 import { setupServer } from 'msw/node';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import App from '../App';
@@ -36,7 +36,11 @@ const detailProductResponder = async ({
   params,
 }: HttpRequestResolverExtras<PathParams>) => {
   const { id } = params;
-  return HttpResponse.json(mockProductsData[Number(id)]);
+  await delay(200);
+  const productData = mockProductsData.find(
+    (product) => product.id === Number(id)
+  );
+  return HttpResponse.json(productData);
 };
 
 const server = setupServer(
@@ -162,5 +166,33 @@ describe('Tests for the Card component', () => {
     expect(fetchSpy).toHaveBeenCalledWith(
       `https://dummyjson.com/products/${productId}`
     );
+  });
+});
+
+describe('Tests for the Detailed Card component', () => {
+  it('Check that a loading indicator is displayed while fetching data', async () => {
+    const user = userEvent.setup();
+    render(
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    );
+    await screen.findAllByTestId('cardElement');
+    const card = screen.getAllByTestId('cardElement')[0];
+    await user.click(card);
+    expect(await screen.findByTestId('loader'));
+    expect(await screen.findByTestId('detailedCard'));
+  });
+  it('Ensure that clicking the close button hides the component', async () => {
+    const user = userEvent.setup();
+    const path = '/1';
+    render(
+      <MemoryRouter initialEntries={[path]}>
+        <App />
+      </MemoryRouter>
+    );
+    const closeButton = await screen.findByRole('button', { name: 'Close' });
+    await user.click(closeButton);
+    expect(screen.queryByTestId('detailedCard')).toBeNull();
   });
 });
