@@ -8,7 +8,7 @@ function InfoSection() {
 
   return (
     <section className={classes.infoSection}>
-      {!!state?.data ? (
+      {!!state?.data?.products.length ? (
         <div className={classes.cards}>
           {state.data.products.map((product) => (
             <Card key={product.id} itemData={product} />
