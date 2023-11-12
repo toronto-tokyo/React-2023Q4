@@ -11,6 +11,7 @@ function Card({ itemData }: Props) {
     <Link
       to={`/${itemData.id + window.location.search}`}
       className={classes.card}
+      data-testid="cardElement"
     >
       <img src={itemData.images[0]} alt="avatar" className={classes.img} />
       <div className={classes.info}>

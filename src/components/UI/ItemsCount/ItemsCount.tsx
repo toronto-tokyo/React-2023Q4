@@ -26,6 +26,7 @@ function ItemsCount() {
         className={classes.select}
         value={state?.itemsPerPage}
         onChange={changeHandler}
+        data-testid="selectComponent"
       >
         {ITEMS_PER_PAGE_OPTIONS.map((item) => (
           <option key={item.value} value={item.value}>

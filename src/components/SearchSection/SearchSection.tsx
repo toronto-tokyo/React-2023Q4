@@ -35,6 +35,7 @@ function SearchSection() {
             value={searchValue}
             type="input"
             onChange={(e) => setSearchValue(e.target.value)}
+            data-testid="searchInputElement"
           />
           <SearchButton />
         </div>
