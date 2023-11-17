@@ -12,11 +12,11 @@ export const doomerApi = createApi({
   endpoints: (build) => ({
     getProducts: build.query({
       query: ({ searchTerm, pageNumber, perPage }: QueryParams) => ({
-        url: '/products',
+        url: '/products/search',
         params: {
           q: searchTerm,
           limit: perPage,
-          skip: pageNumber,
+          skip: pageNumber - 1,
         },
       }),
     }),
