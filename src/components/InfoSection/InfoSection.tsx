@@ -1,16 +1,20 @@
-import { useContext } from 'react';
 import Card from '../Card/Card';
 import classes from './InfoSection.module.css';
-import { StateContext } from '../../stateContext/StateContext';
+import { useGetProductsQuery } from '../../store/reducers/doomerApi';
+import { ProductData } from '../../types/types';
 
 function InfoSection() {
-  const state = useContext(StateContext);
+  const { data } = useGetProductsQuery({
+    searchTerm: '',
+    pageNumber: 1,
+    perPage: 10,
+  });
 
   return (
     <section className={classes.infoSection}>
-      {!!state?.data?.products.length ? (
+      {data ? (
         <div className={classes.cards}>
-          {state.data.products.map((product) => (
+          {data.products.map((product: ProductData) => (
             <Card key={product.id} itemData={product} />
           ))}
         </div>
