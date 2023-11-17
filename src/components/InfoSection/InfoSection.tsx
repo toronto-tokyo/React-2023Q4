@@ -2,10 +2,12 @@ import Card from '../Card/Card';
 import classes from './InfoSection.module.css';
 import { useGetProductsQuery } from '../../store/reducers/doomerApi';
 import { ProductData } from '../../types/types';
+import { useAppSelector } from '../../hooks/redux';
 
 function InfoSection() {
+  const { searchTerm } = useAppSelector((store) => store.appState);
   const { data } = useGetProductsQuery({
-    searchTerm: '',
+    searchTerm,
     pageNumber: 1,
     perPage: 10,
   });

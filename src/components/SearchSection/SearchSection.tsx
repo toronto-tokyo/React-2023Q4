@@ -1,29 +1,23 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import ErrorButton from '../UI/ErrorButton/ErrorButton';
 import SearchButton from '../UI/SearchButton/SearchButton';
 import classes from './SearchSection.module.css';
 import { useNavigate } from 'react-router-dom';
 import { API } from '../../constants/constants';
-import {
-  StateContext,
-  StateDispatchContext,
-} from '../../stateContext/StateContext';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { changeSearchTerm } from '../../store/reducers/appSlice';
 
 function SearchSection() {
-  const state = useContext(StateContext);
-  const dispatchState = useContext(StateDispatchContext);
-  const [searchValue, setSearchValue] = useState(state?.searchTerm ?? '');
+  const { searchTerm } = useAppSelector((store) => store.appState);
+  const dispatch = useAppDispatch();
+  const [searchValue, setSearchValue] = useState(searchTerm);
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     navigate(`?page=${API.initialPageNumber}`);
     setSearchValue(searchValue.trim());
-    dispatchState &&
-      dispatchState({
-        type: 'change-search-term',
-        searchTerm: searchValue,
-      });
+    dispatch(changeSearchTerm(searchValue));
   };
 
   return (
