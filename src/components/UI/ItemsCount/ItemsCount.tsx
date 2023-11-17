@@ -1,30 +1,25 @@
-import React, { useContext } from 'react';
 import classes from './itemsCount.module.css';
 import { API, ITEMS_PER_PAGE_OPTIONS } from '../../../constants/constants';
 import { useNavigate } from 'react-router-dom';
-import {
-  StateContext,
-  StateDispatchContext,
-} from '../../../stateContext/StateContext';
+import { useAppSelector, useAppDispatch } from '../../../hooks/redux';
+import { changeItemsPerPage } from '../../../store/reducers/appSlice';
 
 function ItemsCount() {
   const navigate = useNavigate();
-  const state = useContext(StateContext);
-  const dispatchState = useContext(StateDispatchContext);
+  const { itemsPerPage } = useAppSelector((store) => store.appState);
+  const dispatch = useAppDispatch();
 
   const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatchState &&
-      dispatchState({
-        type: 'change-items-per-page',
-        itemsPerPage: Number(e.target.value),
-      });
+    const selectedItemsPerPage = Number(e.target.value) || itemsPerPage;
     navigate(`?page=${API.initialPageNumber}`);
+    dispatch(changeItemsPerPage(selectedItemsPerPage));
   };
+
   return (
     <div className={classes.itemsCount}>
       <select
         className={classes.select}
-        value={state?.itemsPerPage}
+        value={itemsPerPage}
         onChange={changeHandler}
         data-testid="selectComponent"
       >

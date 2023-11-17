@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 type QueryParams = {
   searchTerm: string;
   pageNumber: number;
-  perPage: number;
+  itemsPerPage: number;
 };
 
 export const doomerApi = createApi({
@@ -11,11 +11,11 @@ export const doomerApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: 'https://dummyjson.com' }),
   endpoints: (build) => ({
     getProducts: build.query({
-      query: ({ searchTerm, pageNumber, perPage }: QueryParams) => ({
+      query: ({ searchTerm, pageNumber, itemsPerPage }: QueryParams) => ({
         url: '/products/search',
         params: {
           q: searchTerm,
-          limit: perPage,
+          limit: itemsPerPage,
           skip: pageNumber - 1,
         },
       }),

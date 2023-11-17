@@ -5,11 +5,13 @@ import { ProductData } from '../../types/types';
 import { useAppSelector } from '../../hooks/redux';
 
 function InfoSection() {
-  const { searchTerm } = useAppSelector((store) => store.appState);
+  const { searchTerm, itemsPerPage } = useAppSelector(
+    (store) => store.appState
+  );
   const { data } = useGetProductsQuery({
     searchTerm,
     pageNumber: 1,
-    perPage: 10,
+    itemsPerPage,
   });
 
   return (
