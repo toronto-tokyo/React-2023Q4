@@ -17,7 +17,7 @@ export const doomerApi = createApi({
         params: {
           q: searchTerm,
           limit: itemsPerPage,
-          skip: pageNumber - 1,
+          skip: (pageNumber - 1) * itemsPerPage,
         },
       }),
     }),

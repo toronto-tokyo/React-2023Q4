@@ -3,14 +3,16 @@ import classes from './InfoSection.module.css';
 import { useGetProductsQuery } from '../../store/reducers/doomerApi';
 import { ProductData } from '../../types/types';
 import { useAppSelector } from '../../hooks/redux';
+import { useGetCurrentPage } from '../../hooks/getCurrentPage';
 
 function InfoSection() {
   const { searchTerm, itemsPerPage } = useAppSelector(
     (store) => store.appState
   );
+  const pageNumber = useGetCurrentPage();
   const { data } = useGetProductsQuery({
     searchTerm,
-    pageNumber: 1,
+    pageNumber,
     itemsPerPage,
   });
 
