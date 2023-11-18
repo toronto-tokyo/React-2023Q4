@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { ProductsData } from '../../types/types';
 
 type QueryParams = {
   searchTerm: string;
@@ -10,8 +11,8 @@ export const doomerApi = createApi({
   reducerPath: 'doomerApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://dummyjson.com' }),
   endpoints: (build) => ({
-    getProducts: build.query({
-      query: ({ searchTerm, pageNumber, itemsPerPage }: QueryParams) => ({
+    getProducts: build.query<ProductsData, QueryParams>({
+      query: ({ searchTerm, pageNumber, itemsPerPage }) => ({
         url: '/products/search',
         params: {
           q: searchTerm,
