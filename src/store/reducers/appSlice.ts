@@ -4,11 +4,13 @@ import { API } from '../../constants/constants';
 type AppStore = {
   searchTerm: string;
   itemsPerPage: number;
+  isMainPageLoading: boolean;
 };
 
 const initialState: AppStore = {
   searchTerm: '',
   itemsPerPage: API.itemsPerPage,
+  isMainPageLoading: true,
 };
 
 const appSlice = createSlice({
@@ -21,8 +23,12 @@ const appSlice = createSlice({
     changeItemsPerPage(state, action: PayloadAction<number>) {
       state.itemsPerPage = action.payload;
     },
+    setIsMainPageLoading(state, action: PayloadAction<boolean>) {
+      state.isMainPageLoading = action.payload;
+    },
   },
 });
 
 export default appSlice.reducer;
-export const { changeSearchTerm, changeItemsPerPage } = appSlice.actions;
+export const { changeSearchTerm, changeItemsPerPage, setIsMainPageLoading } =
+  appSlice.actions;

@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import { API, SEARCH_TERM_STORAGE_KEY } from '../../constants/constants';
 import { DummyAPI } from '../../API/DummyAPI';
 import SearchSection from '../../components/SearchSection/SearchSection';
-import Loader from '../../components/Loader/Loader';
 import InfoSection from '../../components/InfoSection/InfoSection';
 import classes from './MainPage.module.css';
 import Pagination from '../../components/UI/Pagination/Pagination';
@@ -22,6 +21,7 @@ const stateInitialValue = {
 };
 
 function MainPage() {
+  // const { isMainPageLoading } = useAppSelector((store) => store.appState);
   const [search] = useSearchParams();
   const [state, dispatch] = useReducer(stateReducer, stateInitialValue);
   const [currentPageNumber, setCurrentPageNumber] = useState(
@@ -79,18 +79,14 @@ function MainPage() {
       <StateDispatchContext.Provider value={dispatch}>
         <div className={classes.wrapper}>
           <SearchSection />
-          {state.isLoading ? (
-            <Loader />
-          ) : (
-            <main className={classes.main}>
-              <div>
-                <ItemsCount />
-                <InfoSection />
-                <Pagination />
-              </div>
-              <Outlet></Outlet>
-            </main>
-          )}
+          <main className={classes.main}>
+            <div>
+              <ItemsCount />
+              <InfoSection />
+              <Pagination />
+            </div>
+            <Outlet></Outlet>
+          </main>
         </div>
       </StateDispatchContext.Provider>
     </StateContext.Provider>
