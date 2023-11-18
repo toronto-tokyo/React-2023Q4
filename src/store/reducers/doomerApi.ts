@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ProductsData } from '../../types/types';
+import { ProductData, ProductsData } from '../../types/types';
 
 type QueryParams = {
   searchTerm: string;
@@ -21,7 +21,12 @@ export const doomerApi = createApi({
         },
       }),
     }),
+    getDetailedProduct: build.query<ProductData, number>({
+      query: (id) => ({
+        url: `/products/${id}`,
+      }),
+    }),
   }),
 });
 
-export const { useGetProductsQuery } = doomerApi;
+export const { useGetProductsQuery, useGetDetailedProductQuery } = doomerApi;

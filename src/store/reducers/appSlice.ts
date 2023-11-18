@@ -5,12 +5,14 @@ type AppStore = {
   searchTerm: string;
   itemsPerPage: number;
   isMainPageLoading: boolean;
+  isDetailedPageLoading: boolean;
 };
 
 const initialState: AppStore = {
   searchTerm: '',
   itemsPerPage: API.itemsPerPage,
   isMainPageLoading: true,
+  isDetailedPageLoading: true,
 };
 
 const appSlice = createSlice({
@@ -26,9 +28,16 @@ const appSlice = createSlice({
     setIsMainPageLoading(state, action: PayloadAction<boolean>) {
       state.isMainPageLoading = action.payload;
     },
+    setIsDetailedPageLoading(state, action: PayloadAction<boolean>) {
+      state.isDetailedPageLoading = action.payload;
+    },
   },
 });
 
 export default appSlice.reducer;
-export const { changeSearchTerm, changeItemsPerPage, setIsMainPageLoading } =
-  appSlice.actions;
+export const {
+  changeSearchTerm,
+  changeItemsPerPage,
+  setIsMainPageLoading,
+  setIsDetailedPageLoading,
+} = appSlice.actions;
