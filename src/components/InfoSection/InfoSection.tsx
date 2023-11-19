@@ -14,21 +14,21 @@ function InfoSection() {
   );
   const dispatch = useAppDispatch();
   const pageNumber = useGetCurrentPage();
-  const { data, isLoading } = useGetProductsQuery({
+  const { data, isFetching } = useGetProductsQuery({
     searchTerm,
     pageNumber,
     itemsPerPage,
   });
 
   useEffect(() => {
-    dispatch(setIsMainPageLoading(isLoading));
-  }, [isLoading, dispatch]);
+    dispatch(setIsMainPageLoading(isFetching));
+  }, [isFetching, dispatch]);
 
   return (
     <section className={classes.infoSection}>
-      {isLoading && <Loader />}
+      {isFetching && <Loader />}
       {!data && <h1 className={classes.notFound}>Not not found</h1>}
-      {!isLoading && data && (
+      {!isFetching && data && (
         <>
           <div className={classes.cards}>
             {data.products.map((product: ProductData) => (
