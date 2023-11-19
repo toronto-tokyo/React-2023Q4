@@ -22,7 +22,7 @@ function MainPage() {
     <div className={classes.wrapper}>
       <SearchSection />
       <main className={classes.main}>
-        <div>
+        <div className={classes.mainLeftSide}>
           <ItemsCount />
           <InfoSection />
           <Pagination />

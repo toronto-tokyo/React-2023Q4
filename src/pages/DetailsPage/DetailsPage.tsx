@@ -20,7 +20,7 @@ function DetailsPage() {
   }, [dispatch, isLoading]);
 
   return (
-    <div>
+    <div className={classes.productWrapper}>
       {isLoading && <Loader />}
       {!isLoading && data && (
         <div className={classes.productWrapper} data-testid="detailedCard">
