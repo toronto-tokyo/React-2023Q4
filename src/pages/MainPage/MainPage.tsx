@@ -5,13 +5,14 @@ import SearchSection from '../../components/SearchSection/SearchSection';
 import InfoSection from '../../components/InfoSection/InfoSection';
 import classes from './MainPage.module.css';
 import Pagination from '../../components/UI/Pagination/Pagination';
-import { Outlet, useSearchParams } from 'react-router-dom';
+import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import ItemsCount from '../../components/UI/ItemsCount/ItemsCount';
 import { stateReducer } from '../../stateReducer/stateReducer';
 import {
   StateContext,
   StateDispatchContext,
 } from '../../stateContext/StateContext';
+import { useGetCurrentPage } from '../../hooks/getCurrentPage';
 
 const stateInitialValue = {
   data: null,
@@ -27,7 +28,8 @@ function MainPage() {
   const [currentPageNumber, setCurrentPageNumber] = useState(
     API.initialPageNumber
   );
-
+  const navigate = useNavigate();
+  const currentPage = useGetCurrentPage();
   const getProducts = useCallback(
     (value: string, currentPage: number, itemsPerPage: number) => {
       (async () => {
@@ -57,7 +59,10 @@ function MainPage() {
       type: 'change-search-term',
       searchTerm: localStorage.getItem(SEARCH_TERM_STORAGE_KEY) || '',
     });
-  }, []);
+    if (currentPage < API.initialPageNumber) {
+      navigate(`?page=${API.initialPageNumber}`);
+    }
+  }, [currentPage, navigate]);
 
   useEffect(() => {
     localStorage.setItem(SEARCH_TERM_STORAGE_KEY, state.searchTerm);

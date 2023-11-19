@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { useGetCurrentPage } from '../../hooks/getCurrentPage';
 import { setIsMainPageLoading } from '../../store/reducers/appSlice';
 import Loader from '../Loader/Loader';
+import { useEffect } from 'react';
 
 function InfoSection() {
   const { searchTerm, itemsPerPage } = useAppSelector(
@@ -18,7 +19,10 @@ function InfoSection() {
     pageNumber,
     itemsPerPage,
   });
-  dispatch(setIsMainPageLoading(isLoading));
+
+  useEffect(() => {
+    dispatch(setIsMainPageLoading(isLoading));
+  }, [isLoading, dispatch]);
 
   return (
     <section className={classes.infoSection}>

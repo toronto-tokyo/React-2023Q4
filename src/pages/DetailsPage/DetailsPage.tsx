@@ -4,16 +4,20 @@ import classes from './DetailsPage.module.css';
 import { useGetDetailedProductQuery } from '../../store/reducers/doomerApi';
 import { useAppDispatch } from '../../hooks/redux';
 import { setIsDetailedPageLoading } from '../../store/reducers/appSlice';
+import { useEffect } from 'react';
 
 function DetailsPage() {
   const params = useParams();
   const { data, isLoading } = useGetDetailedProductQuery(Number(params.id));
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  dispatch(setIsDetailedPageLoading(isLoading));
   const handleClick = () => {
     navigate(`/${window.location.search}`);
   };
+
+  useEffect(() => {
+    dispatch(setIsDetailedPageLoading(isLoading));
+  }, [dispatch, isLoading]);
 
   return (
     <div>
