@@ -8,6 +8,7 @@ import { InferGetServerSidePropsType } from 'next';
 import { ProductsData } from '@/types/type';
 import Header from '@/components/header/header';
 import ItemsPerPage from '@/components/UI/itemsPerPage/itemsPerPage';
+import Pagination from '@/components/UI/pagination/pagination';
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) =>
@@ -29,8 +30,17 @@ export const getServerSideProps = wrapper.getServerSideProps(
       const allProductsData = apiState.find(
         (item) => item.endpointName === 'getProducts'
       )?.data as ProductsData | undefined;
+      const lastPageNumber = Math.ceil(
+        (allProductsData?.total || 1) / itemsPerPage
+      );
       return {
-        props: { searchTerm, pageNumber, itemsPerPage, allProductsData },
+        props: {
+          searchTerm,
+          pageNumber,
+          itemsPerPage,
+          allProductsData,
+          lastPageNumber,
+        },
       };
     }
 );
@@ -40,6 +50,7 @@ function Index({
   pageNumber,
   itemsPerPage,
   allProductsData,
+  lastPageNumber,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <div className={classes.wrapper}>
@@ -48,6 +59,7 @@ function Index({
         <div className={classes.mainLeftSide}>
           <ItemsPerPage itemsPerPage={itemsPerPage} />
           <CardList data={allProductsData} />
+          <Pagination pageNumber={pageNumber} lastPageNumber={lastPageNumber} />
         </div>
       </main>
     </div>
