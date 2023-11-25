@@ -7,6 +7,7 @@ import CardList from '@/components/cardList/cardList';
 import { InferGetServerSidePropsType } from 'next';
 import { ProductsData } from '@/types/type';
 import Header from '@/components/header/header';
+import ItemsPerPage from '@/components/UI/itemsPerPage/itemsPerPage';
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) =>
@@ -45,6 +46,7 @@ function Index({
       <Header searchTerm={searchTerm} />
       <main className={classes.main}>
         <div className={classes.mainLeftSide}>
+          <ItemsPerPage itemsPerPage={itemsPerPage} />
           <CardList data={allProductsData} />
         </div>
       </main>
