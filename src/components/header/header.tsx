@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import classes from './Header.module.css';
 import ErrorButton from '../UI/errorButton/errorButton';
 import SearchButton from '../UI/searchButton/searchButton';
+import { API } from '@/constants/constants';
 
 interface IProps {
   searchTerm: string;
@@ -15,8 +16,19 @@ function Header({ searchTerm }: IProps) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSearchValue(searchValue.trim());
+    const routerQuery = router.query;
+    const { per_page } = routerQuery;
+    const queryParams: Record<string, string | string[]> = {
+      page: String(API.initialPageNumber),
+    };
+    if (per_page) {
+      queryParams.per_page = per_page;
+    }
+    if (searchValue) {
+      queryParams.q = searchValue;
+    }
     router.push({
-      query: searchValue ? { q: searchValue, page: 1 } : { page: 1 },
+      query: queryParams,
     });
   };
 
