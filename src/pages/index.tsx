@@ -2,13 +2,9 @@ import { API } from '@/constants/constants';
 import { api } from '@/redux/api';
 import { wrapper } from '@/redux/store';
 import React from 'react';
-import classes from '../styles/indexPage.module.css';
-import CardList from '@/components/cardList/cardList';
 import { InferGetServerSidePropsType } from 'next';
 import { ProductsData } from '@/types/type';
-import Header from '@/components/header/header';
-import ItemsPerPage from '@/components/UI/itemsPerPage/itemsPerPage';
-import Pagination from '@/components/UI/pagination/pagination';
+import Layout from '@/components/layout/layout';
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) =>
@@ -53,16 +49,13 @@ function Index({
   lastPageNumber,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
-    <div className={classes.wrapper}>
-      <Header searchTerm={searchTerm} />
-      <main className={classes.main}>
-        <div className={classes.mainLeftSide}>
-          <ItemsPerPage itemsPerPage={itemsPerPage} />
-          <CardList data={allProductsData} />
-          <Pagination pageNumber={pageNumber} lastPageNumber={lastPageNumber} />
-        </div>
-      </main>
-    </div>
+    <Layout
+      allProductsData={allProductsData}
+      itemsPerPage={itemsPerPage}
+      lastPageNumber={lastPageNumber}
+      pageNumber={pageNumber}
+      searchTerm={searchTerm}
+    ></Layout>
   );
 }
 
