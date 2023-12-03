@@ -4,6 +4,8 @@ import classes from '../styles/UncontrolledComponents.module.css';
 import { ValidationError } from 'yup';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../hooks/redux';
+import { changeUncontrolledFormData } from '../redux/reducers/formsDataSlice';
 
 export interface IValidationErrors {
   name?: string;
@@ -17,17 +19,32 @@ export interface IValidationErrors {
   country?: string;
 }
 
+export interface IFormData {
+  name: string;
+  age: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  gender: string;
+  acceptTC: string;
+  imgFile: File;
+  country: string;
+}
+
 function UncontrolledComponents() {
   const [validationErrors, setValidationErrors] = useState<IValidationErrors>(
     {}
   );
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    const formData = Object.fromEntries(
+      new FormData(e.currentTarget).entries()
+    );
     try {
-      await schema.validate(Object.fromEntries(formData.entries()), {
+      await schema.validate(formData, {
         abortEarly: false,
       });
     } catch (err) {
@@ -43,7 +60,17 @@ function UncontrolledComponents() {
       }
       return;
     }
-    navigate('/');
+    const typedFormData = formData as unknown as IFormData;
+    const imgFile = typedFormData.imgFile;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64Img = reader.result as string;
+      dispatch(
+        changeUncontrolledFormData({ ...typedFormData, imgFile: base64Img })
+      );
+      navigate('/');
+    };
+    reader.readAsDataURL(imgFile);
   };
 
   return (
