@@ -1,14 +1,22 @@
 import { useState, useRef } from 'react';
 import classes from './FormSelectInput.module.css';
+import FormErrorLine from '../../FormErrorLine/FormErrorLine';
 
 interface IProps {
   labelTitle: string;
   id: string;
   selectElements: string[];
   name: string;
+  errorMessage?: string;
 }
 
-function FormSelectInput({ labelTitle, id, selectElements, name }: IProps) {
+function FormSelectInput({
+  labelTitle,
+  id,
+  selectElements,
+  name,
+  errorMessage,
+}: IProps) {
   const [listElements, setListElements] = useState<string[] | null>();
   const [ariaActiveDescendant, setAriaActiveDescendant] = useState<string>('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -67,6 +75,7 @@ function FormSelectInput({ labelTitle, id, selectElements, name }: IProps) {
         autoComplete="off"
         aria-activedescendant={ariaActiveDescendant}
       />
+      {errorMessage && <FormErrorLine>{errorMessage}</FormErrorLine>}
       <ul
         className={classes.selectElementsList}
         onMouseOver={handleMouseOver}
