@@ -1,13 +1,15 @@
 import { useState, useRef } from 'react';
 import classes from './FormSelectInput.module.css';
 import FormErrorLine from '../../FormErrorLine/FormErrorLine';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 interface IProps {
   labelTitle: string;
   id: string;
   selectElements: string[];
-  name: string;
+  name?: string;
   errorMessage?: string;
+  register?: UseFormRegisterReturn;
 }
 
 function FormSelectInput({
@@ -16,13 +18,16 @@ function FormSelectInput({
   selectElements,
   name,
   errorMessage,
+  register,
 }: IProps) {
   const [listElements, setListElements] = useState<string[] | null>();
   const [ariaActiveDescendant, setAriaActiveDescendant] = useState<string>('');
   const inputRef = useRef<HTMLInputElement>(null);
+  const [registerInputValue, setRegisterInputValue] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
+    register && setRegisterInputValue(inputValue);
     const suitableListElements = selectElements.filter((element) =>
       element.toLowerCase().includes(inputValue.toLowerCase())
     );
@@ -38,9 +43,10 @@ function FormSelectInput({
   };
 
   const handleBlur = () => {
-    if (inputRef.current) {
+    if (!register && inputRef.current) {
       inputRef.current.value = ariaActiveDescendant;
     }
+    setRegisterInputValue(ariaActiveDescendant);
     setListElements(null);
   };
 
@@ -49,7 +55,6 @@ function FormSelectInput({
   ) => {
     if (e.target instanceof HTMLElement) {
       const targetValue = e.target.dataset.country;
-      console.log(targetValue);
       setAriaActiveDescendant(targetValue || '');
     }
   };
@@ -63,18 +68,36 @@ function FormSelectInput({
       <label htmlFor={id} className={classes.label}>
         {labelTitle}
       </label>
-      <input
-        id={id}
-        ref={inputRef}
-        name={name}
-        type="text"
-        className={classes.input}
-        onChange={handleChange}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        autoComplete="off"
-        aria-activedescendant={ariaActiveDescendant}
-      />
+      {register ? (
+        <input
+          id={id}
+          {...{
+            ...register,
+            onChange: (e) => handleChange(e),
+            onBlur: () => handleBlur(),
+          }}
+          value={registerInputValue}
+          type="text"
+          className={classes.input}
+          onFocus={handleFocus}
+          autoComplete="off"
+          aria-activedescendant={ariaActiveDescendant}
+        />
+      ) : (
+        <input
+          id={id}
+          ref={inputRef}
+          name={name}
+          type="text"
+          className={classes.input}
+          onChange={handleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          autoComplete="off"
+          aria-activedescendant={ariaActiveDescendant}
+        />
+      )}
+
       {errorMessage && <FormErrorLine>{errorMessage}</FormErrorLine>}
       <ul
         className={classes.selectElementsList}

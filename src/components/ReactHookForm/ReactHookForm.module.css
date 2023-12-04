@@ -1,6 +1,6 @@
-.uncontrolledForm {
-  width: 400px;
-  margin: 0 auto;
+.reactHookForm {
+  max-width: 400px;
+  margin: 20px auto;
   display: flex;
   flex-direction: column;
   gap: 20px;

@@ -2,14 +2,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface IFormData {
   name: string;
-  age: string;
+  age: number;
   email: string;
   password: string;
   confirmPassword: string;
   gender: string;
   acceptTC: string;
   imgFile: string;
-  country: string;
+  country?: string | undefined;
 }
 interface IInitialStateData {
   uncontrolledForm: IFormData;
@@ -18,7 +18,7 @@ interface IInitialStateData {
 
 const initialFormData: IFormData = {
   name: '',
-  age: '',
+  age: 0,
   email: '',
   password: '',
   confirmPassword: '',

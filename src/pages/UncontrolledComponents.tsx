@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../hooks/redux';
 import { changeUncontrolledFormData } from '../redux/reducers/formsDataSlice';
+import { IFormData } from '../Validations/formsValidation';
 
 export interface IValidationErrors {
   name?: string;
@@ -17,18 +18,6 @@ export interface IValidationErrors {
   acceptTC?: string;
   imgFile?: string;
   country?: string;
-}
-
-export interface IFormData {
-  name: string;
-  age: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  gender: string;
-  acceptTC: string;
-  imgFile: File;
-  country: string;
 }
 
 function UncontrolledComponents() {
@@ -61,7 +50,7 @@ function UncontrolledComponents() {
       return;
     }
     const typedFormData = formData as unknown as IFormData;
-    const imgFile = typedFormData.imgFile;
+    const imgFile = typedFormData.imgFile as File;
     const reader = new FileReader();
     reader.onload = () => {
       const base64Img = reader.result as string;

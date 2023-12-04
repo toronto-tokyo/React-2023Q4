@@ -12,7 +12,7 @@
 .selectElementsList {
   background-color: #fff;
   position: absolute;
-  top: 20px;
+  top: 4rem;
   left: 0;
   max-height: 100px;
   overflow-y: auto;

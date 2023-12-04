@@ -17,6 +17,7 @@ export const schema = yup.object().shape({
   email: yup.string().required().email(),
   password: yup
     .string()
+    .required()
     .matches(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^a-zA-Z\d]).{4,}$/, {
       message:
         'Password should contain: 1 number, 1 uppercased letter, 1 lowercased letter, 1 special character',
@@ -30,16 +31,24 @@ export const schema = yup.object().shape({
   imgFile: yup
     .mixed()
     .required()
-    .test(
-      'file-size',
-      'Size of file should be under 100kb',
-      (value) => value instanceof File && value.size <= MAX_FILE_SIZE
-    )
-    .test(
-      'file-type',
-      'Format of file should be .png or .jpeg',
-      (value) =>
+    .test('file-size', 'Size of file should be under 100kb', (value) => {
+      if (value instanceof FileList) {
+        return value[0] instanceof File && value[0].size <= MAX_FILE_SIZE;
+      }
+      return value instanceof File && value.size <= MAX_FILE_SIZE;
+    })
+    .test('file-type', 'Format of file should be .png or .jpeg', (value) => {
+      if (value instanceof FileList) {
+        return (
+          value[0] instanceof File &&
+          SUPPORTED_FILE_FORMATS.includes(value[0].type)
+        );
+      }
+      return (
         value instanceof File && SUPPORTED_FILE_FORMATS.includes(value.type)
-    ),
-  country: yup.string().required(),
+      );
+    }),
+  country: yup.string(),
 });
+
+export interface IFormData extends yup.InferType<typeof schema> {}
